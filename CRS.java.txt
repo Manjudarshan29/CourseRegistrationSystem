@@ -1,0 +1,212 @@
+package miniproj;
+
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class CourseRegistrationSystem1 extends JFrame {
+
+    private JLabel firstnameLabel, lastnameLabel, cetrankLabel, dobLabel, courseLabel, feeLabel, totalLabel;
+    private JLabel hobbiesLabel, interestsLabel, clubsLabel, culturalEventsLabel, sportsLabel, reasonLabel;
+    private JTextField firstnameField, lastnameField, cetrankField, dobField, feeField, totalField;
+    private JTextArea hobbiesArea, interestsArea, sportsArea, reasonArea;
+    private JRadioButton culturalYesButton, culturalNoButton;
+    private ButtonGroup culturalGroup;
+    private JButton calculateButton, printButton, exitButton;
+    private JComboBox<String> courseComboBox, clubsComboBox;
+    private String username = "admin";
+    private String password = "password";
+
+    public CourseRegistrationSystem1() {
+
+        setTitle("Course Registration System");
+        setSize(700, 700);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        setLayout(new GridLayout(16, 2, 8, 2));
+
+        firstnameLabel = new JLabel("First Name:");
+        add(firstnameLabel);
+        firstnameField = new JTextField();
+        add(firstnameField);
+
+        lastnameLabel = new JLabel("Last Name:");
+        add(lastnameLabel);
+        lastnameField = new JTextField();
+        add(lastnameField);
+
+        cetrankLabel = new JLabel("KCET Rank: ");
+        add(cetrankLabel);
+        cetrankField = new JTextField();
+        add(cetrankField);
+
+        dobLabel = new JLabel("Date of Birth (YYYY-MM-DD):");
+        add(dobLabel);
+        dobField = new JTextField();
+        add(dobField);
+
+        courseLabel = new JLabel("Select Course: ");
+        add(courseLabel);
+        courseComboBox = new JComboBox<String>(
+                new String[] { "Artificial Intelligence and Machine Learning (AIML)", "Computer Science (CS)",
+                        "Information Science (IS)", "Electronics and Communication (EC)", "Electrical and Electronics (EEE)",
+                        "Mechanical (ME)", "Biotechnology", "Civil" });
+        add(courseComboBox);
+
+        feeLabel = new JLabel("Hostel Fee:");
+        add(feeLabel);
+        feeField = new JTextField();
+        add(feeField);
+
+        hobbiesLabel = new JLabel("Hobbies:");
+        add(hobbiesLabel);
+        hobbiesArea = new JTextArea(3, 20);
+        add(new JScrollPane(hobbiesArea));
+
+        interestsLabel = new JLabel("Areas of Interest:");
+        add(interestsLabel);
+        interestsArea = new JTextArea(3, 20);
+        add(new JScrollPane(interestsArea));
+
+        clubsLabel = new JLabel("Clubs Interested to Join:");
+        add(clubsLabel);
+        clubsComboBox = new JComboBox<String>(
+                new String[] { "Nature Club", "TechIT - Coding Club", "Photgraphy Club", "Q-Quotient Quiz CLub", "RoboHawks BNMIT", "Wellness Club" });
+        add(clubsComboBox);
+
+        culturalEventsLabel = new JLabel("Want to be a part of cultural events?");
+        add(culturalEventsLabel);
+
+        JPanel culturalPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        culturalYesButton = new JRadioButton("Yes");
+        culturalNoButton = new JRadioButton("No");
+        culturalGroup = new ButtonGroup();
+        culturalGroup.add(culturalYesButton);
+        culturalGroup.add(culturalNoButton);
+        culturalPanel.add(culturalYesButton);
+        culturalPanel.add(culturalNoButton);
+        add(culturalPanel);
+
+        sportsLabel = new JLabel("What sports are you interested in?");
+        add(sportsLabel);
+        sportsArea = new JTextArea(3, 20);
+        add(new JScrollPane(sportsArea));
+
+        reasonLabel = new JLabel("Why do you want to join BNMIT?");
+        add(reasonLabel);
+        reasonArea = new JTextArea(3, 20);
+        add(new JScrollPane(reasonArea));
+
+        totalLabel = new JLabel("Total:");
+        add(totalLabel);
+        totalField = new JTextField();
+        totalField.setEditable(false);
+        add(totalField);
+
+        calculateButton = new JButton("Calculate");
+        add(calculateButton);
+        calculateButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                calculateButtonActionPerformed(evt);
+            }
+        });
+
+        printButton = new JButton("Print");
+        add(printButton);
+        printButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                printButtonActionPerformed(evt);
+            }
+        });
+
+        exitButton = new JButton("Exit");
+        add(exitButton);
+        exitButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                exitButtonActionPerformed(evt);
+            }
+        });
+
+        setVisible(true);
+        showLoginDialog();
+    }
+
+    private void showLoginDialog() {
+        JTextField usernameField = new JTextField();
+        JPasswordField passwordField = new JPasswordField();
+        Object[] message = { "Username:", usernameField, "Password:", passwordField };
+        int option = JOptionPane.showConfirmDialog(null, message, "Login", JOptionPane.OK_CANCEL_OPTION);
+        if (option == JOptionPane.OK_OPTION) {
+            String enteredUsername = usernameField.getText();
+            String enteredPassword = new String(passwordField.getPassword());
+            if (enteredUsername.equals(username) && enteredPassword.equals(password)) {
+                // Correct login, continue
+            } else {
+                JOptionPane.showMessageDialog(null, "Incorrect username or password. Please try again.");
+                showLoginDialog();
+            }
+        } else {
+            System.exit(0);
+        }
+    }
+
+    private void calculateButtonActionPerformed(ActionEvent evt) {
+        try {
+            double fee = Double.parseDouble(feeField.getText());
+            double total = fee + 83500;
+            totalField.setText(String.format("%.2f", total));
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Please enter a valid number for the fee.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void printButtonActionPerformed(ActionEvent evt) {
+        try {
+            String firstname = firstnameField.getText();
+            String lastname = lastnameField.getText();
+            String dob = dobField.getText();
+            String course = (String) courseComboBox.getSelectedItem();
+            double cetrank = Double.parseDouble(cetrankField.getText());
+            double fee = Double.parseDouble(feeField.getText());
+            double total = Double.parseDouble(totalField.getText());
+            String hobbies = hobbiesArea.getText();
+            String interests = interestsArea.getText();
+            String club = (String) clubsComboBox.getSelectedItem();
+            boolean culturalEvents = culturalYesButton.isSelected();
+            String sports = sportsArea.getText();
+            String reason = reasonArea.getText();
+
+            String bill = "---------------------------------------\n"
+                    + "         BILL GENERATION\n"
+                    + "---------------------------------------\n\n"
+                    + "Course Registered: " + course + "\n\n"
+                    + "Name: " + firstname + " " + lastname + "\n\n"
+                    + "Obtained KCET Rank: " + cetrank + "\n\n"
+                    + "Date of Birth: " + dob + "\n\n"
+                    + "Course Fee: Rs 83,500.00\n"
+                    + "Hostel Fee: Rs " + String.format("%.2f", fee) + "\n"
+                    + "---------------------------------\n"
+                    + "Total Fee: Rs " + String.format("%.2f", total) + "\n"
+                    + "---------------------------------\n\n"
+                    + "Hobbies: " + hobbies + "\n\n"
+                    + "Interests: " + interests + "\n\n"
+                    + "Clubs Interested to Join: " + club + "\n\n"
+                    + "Want to be a part of cultural events?: " + (culturalEvents ? "Yes" : "No") + "\n\n"
+                    + "Sports Interested In: " + sports + "\n\n"
+                    + "Why do you want to join BNMIT?: " + reason + "\n"
+                    + "---------------------------------------\n";
+
+            JOptionPane.showMessageDialog(this, bill);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Please enter valid numbers for the rank and fees.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void exitButtonActionPerformed(ActionEvent evt) {
+        System.exit(0);
+    }
+
+    public static void main(String[] args) {
+        new CourseRegistrationSystem1();
+    }
+}
